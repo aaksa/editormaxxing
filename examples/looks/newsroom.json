@@ -1,0 +1,121 @@
+{
+ "look": "newsroom",
+ "hud": {
+  "paper": "The Daily Session",
+  "date": "Thursday, October 29, 2026"
+ },
+ "scenes": [
+  {
+   "start": 0,
+   "end": "l:1-0.08",
+   "set": "newsprint",
+   "shot": "mid",
+   "in": "cut",
+   "move": "push"
+  },
+  {
+   "start": "l:1-0.08",
+   "end": "w:big-0.08",
+   "set": "evidence",
+   "shot": "mid",
+   "in": "tear"
+  },
+  {
+   "start": "w:big-0.08",
+   "end": "l:2-0.08",
+   "set": "archive",
+   "shot": "mid",
+   "in": "paper"
+  },
+  {
+   "start": "l:2-0.08",
+   "end": "w:can't-0.08",
+   "set": "newsprint",
+   "shot": "wide",
+   "in": "tear",
+   "move": "rise"
+  },
+  {
+   "start": "w:can't-0.08",
+   "end": 10,
+   "set": "evidence",
+   "shot": "mid",
+   "in": "paper"
+  }
+ ],
+ "effects": [
+  {
+   "fx": "newspaper",
+   "start": 0.05,
+   "end": "l:1-0.1",
+   "text": "Welcome [back]",
+   "deck": "to our session, today",
+   "markAt": "w:back",
+   "y": 0.28,
+   "width": 880,
+   "buys": "this is an occasion: a front page"
+  },
+  {
+   "fx": "typewriter",
+   "start": "w:session",
+   "end": "l:1-0.1",
+   "text": "SESSION \u00b7 TODAY",
+   "sub": "29 October 2026",
+   "y": 0.7
+  },
+  {
+   "fx": "clipping",
+   "start": "l:1",
+   "end": "w:big-0.1",
+   "text": "I'm [really] excited",
+   "markAt": "w:excited",
+   "y": 0.2,
+   "size": 70
+  },
+  {
+   "fx": "stamp",
+   "start": "w:news",
+   "end": "l:2-0.1",
+   "text": "BIG NEWS",
+   "y": 0.3,
+   "size": 120
+  },
+  {
+   "fx": "photo",
+   "start": "w:big-0.1",
+   "end": "l:2-0.1",
+   "caption": "Big news, to share with you.",
+   "x": 0.5,
+   "y": 0.25,
+   "width": 520,
+   "tilt": -4,
+   "zoom": 2.3,
+   "focusY": 0.6
+  },
+  {
+   "fx": "redact",
+   "start": "l:2",
+   "end": "w:can't-0.1",
+   "title": "PROJECT FILE",
+   "lines": "Working on: THIS PROJECT|Started: MONTHS AGO|Status: ALMOST READY",
+   "reveal": 1,
+   "revealAt": "w:months",
+   "y": 0.27,
+   "size": 44,
+   "buys": "it is serious, months of work"
+  },
+  {
+   "fx": "map",
+   "start": "w:can't",
+   "end": 10,
+   "title": "For you all",
+   "pins": "106.8,-6.2,Jakarta|103.8,1.35,Singapore|100.5,13.75,Bangkok|121.0,14.6,Manila|151.2,-33.9,Sydney",
+   "center": "122,2",
+   "zoom": 1.15,
+   "leg": 4,
+   "y": 0.25,
+   "width": 880,
+   "aspect": 0.66
+  }
+ ]
+}

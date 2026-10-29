@@ -28,7 +28,7 @@ const scenes = (raw.scenes ?? []).map((s) => ({ ...s, start: Number(s.start ?? 0
 const effects = (raw.effects ?? []).map((e) => ({ ...e, start: Number(e.start ?? 0), end: clampEnd(e.end) }));
 if (!track.placeholder && !fs.existsSync(path.join(job, 'person.webm'))) die(`no person.webm in ${job}: track the clip first (see SKILL.md)`);
 const room = !track.placeholder && fs.existsSync(path.join(job, 'room.mp4')) ? 'room.mp4' : null;   // the clean plate, for set "footage"
-const inputProps = { track, scenes, effects, audio: raw.audio ?? null, motion: raw.motion ?? 'refined', room };
+const inputProps = { track, scenes, effects, audio: raw.audio ?? null, motion: raw.motion ?? 'refined', room, look: raw.look ?? 'gloss', hud: raw.hud ?? {} };
 
 const t0 = Date.now();
 const secs = () => `${((Date.now() - t0) / 1000).toFixed(0)}s`;

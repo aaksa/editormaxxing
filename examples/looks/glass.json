@@ -1,0 +1,21 @@
+{
+  "look": "glass",
+  "scenes": [
+    {"start": 0,             "end": "l:1-0.08",    "set": "aurora",   "shot": "mid",  "in": "cut", "move": "push"},
+    {"start": "l:1-0.08",    "end": "w:big-0.08",  "set": "frost",    "shot": "mid",  "in": "glide"},
+    {"start": "w:big-0.08",  "end": "l:2-0.08",    "set": "midnight", "shot": "wide", "in": "lens"},
+    {"start": "l:2-0.08",    "end": "w:can't-0.08","set": "aurora",   "shot": "wide", "in": "lens", "move": "pull"},
+    {"start": "w:can't-0.08","end": 10,            "set": "frost",    "shot": "mid",  "in": "glide"}
+  ],
+  "effects": [
+    {"fx": "glass-title",  "start": 0.05, "end": "l:1-0.1", "text": "Welcome *back*", "y": 0.17, "size": 130},
+    {"fx": "glass-notify", "start": "w:session", "end": "l:1-0.1", "items": "Session is live::Welcome back, today’s session starts now", "app": "Session", "y": 0.62},
+    {"fx": "glass-card",   "start": "w:excited", "end": "w:big-0.1", "title": "Really excited", "sub": "something to share", "icon": "spark", "y": 0.68},
+    {"fx": "glass-title",  "start": "w:big", "end": "l:2-0.1", "text": "Big *news*", "y": 0.16, "size": 170, "weight": 700},
+    {"fx": "light-sweep",  "start": "w:news", "end": "w:you"},
+    {"fx": "glass-orbs",   "start": "w:big", "end": "l:2-0.1", "count": 4},
+    {"fx": "glass-number", "start": "l:2", "end": "w:can't-0.1", "from": 0, "to": 6, "suffix": "months", "label": "in the making", "y": 0.27, "size": 520,
+     "buys": "months of work, made concrete"},
+    {"fx": "glass-list",   "start": "w:can't", "end": 10, "rows": "Built|Tested|Ready for you", "times": "w:can't+0.4|w:you@2|w:see", "y": 0.27}
+  ]
+}

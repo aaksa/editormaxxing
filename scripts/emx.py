@@ -172,12 +172,14 @@ def reframe(args):
     w, h = info['width'], info['height']
     if h / w >= 1.7:      # already vertical: just scale to 1080x1920
         vf = f'scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1'
-    else:                 # a crop ~1.05x as wide as tall around the person, scaled to the width, padded above with a neutral grey
-        cw = min(w, int(h * 1.05) // 2 * 2)
-        x0 = max(0, min(w - cw, int(w * x - cw / 2)))
+    else:                 # a crop ~1.05x as wide as tall around the person, scaled to the width; the space above is filled
+        cw = min(w, int(h * 1.05) // 2 * 2)        # with the frame's own top strip (above the head), mirrored, stretched and
+        x0 = max(0, min(w - cw, int(w * x - cw / 2)))   # blurred: the room continues upward, no flat band in "footage" sets
         sh = int(round(cw and h * W / cw)) // 2 * 2
-        vf = (f"crop={cw}:{h}:'min({w - cw},max(0,{x0}+{follow}*t))':0,scale={W}:{sh}:flags=lanczos,"
-              f"pad={W}:{H}:0:{H - sh}:color=0xE9E9E6,setsar=1")
+        strip = max(16, int(sh * 0.08) // 2 * 2)
+        vf = (f"crop={cw}:{h}:'min({w - cw},max(0,{x0}+{follow}*t))':0,scale={W}:{sh}:flags=lanczos,split[fg][s];"
+              f"[s]crop={W}:{strip}:0:0,vflip,scale={W}:{H - sh},boxblur=24:2[top];"
+              f"[top][fg]vstack,setsar=1")
     run(['ffmpeg', '-v', 'error', '-y', '-i', src, '-vf', vf, '-c:v', 'libx264', '-crf', '14', '-preset', 'slow', '-pix_fmt', 'yuv420p',
          '-c:a', 'aac', '-b:a', '192k', out])
     print('reframed:', out)
@@ -220,7 +222,8 @@ def check(args):
     for b in range(blanks): pad.append(f'color=c=black:s=270x480[b{b}]')
     labels = ''.join(f'[v{i}]' for i in range(len(pngs))) + ''.join(f'[b{b}]' for b in range(blanks))
     layout = '|'.join(f'{c * 270}_{r * 480}' for r in range(rows) for c in range(cols))
-    run(['ffmpeg', '-v', 'error', '-y', *inputs, '-filter_complex', ';'.join(pad) + f';{labels}xstack=inputs={cols * rows}:layout={layout}', '-frames:v', '1', sheet])
+    graph = ';'.join(pad) + (f';{labels}xstack=inputs={cols * rows}:layout={layout}' if cols * rows > 1 else '')   # xstack needs 2+ inputs
+    run(['ffmpeg', '-v', 'error', '-y', *inputs, '-filter_complex', graph, '-frames:v', '1', sheet])
     print('sheet:', sheet)
 
 

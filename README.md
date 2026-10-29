@@ -43,3 +43,7 @@ python3 scripts/emx.py render jobs/me my_plan.json --out final.mp4 [--music bed.
 | `demo/` | the placeholder demo and the real-footage test (`test.mp4`, from `examples/test.json`), each with its timeline and QC report |
 | `remotion/src/` | Stage (layers + cuts), Placeholder, sets, `fx/` (effects), `lib/` (core timing, gloss type, three) |
 | `scripts/` | `emx.py` (CLI), `plan.py` (anchors), `words.py`, `sound.py`, `report.py` |
+
+## Looks
+Beside the red gloss: `newsroom` (documentary), `glass` (premium liquid glass), `vhs` (camcorder) and `split` (screen-share
+explainer). See `docs/looks.md`; demos in `demo/looks/`.

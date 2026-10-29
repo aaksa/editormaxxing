@@ -3,3 +3,4 @@ node_modules/
 jobs/
 *.mp4
 !demo/*.mp4
+!demo/looks/*.mp4

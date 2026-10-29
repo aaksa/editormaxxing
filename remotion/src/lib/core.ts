@@ -13,9 +13,14 @@ export type Track = {
   top: number[];           // per frame: top of the head, normalised by height
 };
 export type FxSpec = { fx: string; start: number; end: number } & Record<string, unknown>;
-export type SetName = 'studio' | 'halftone' | 'blush' | 'stripes' | 'dark' | 'blue' | 'silk' | 'ember' | 'footage';
+export type SetName = 'studio' | 'halftone' | 'blush' | 'stripes' | 'dark' | 'blue' | 'silk' | 'ember' | 'footage'
+  | 'newsprint' | 'evidence' | 'archive'          // newsroom
+  | 'aurora' | 'frost' | 'midnight'               // glass
+  | 'bluescreen' | 'snow'                         // vhs (its other sets: footage, any)
+  | 'board' | 'slate';                            // split
 export type ShotName = 'wide' | 'mid' | 'close' | 'none';
-export type CutName = 'glide' | 'depth' | 'curtain' | 'whip' | 'cut' | 'bloom' | 'zoom' | 'iris' | 'flare' | 'spin' | 'slats' | 'push' | 'flood';
+export type CutName = 'glide' | 'depth' | 'curtain' | 'whip' | 'cut' | 'bloom' | 'zoom' | 'iris' | 'flare' | 'spin' | 'slats' | 'push' | 'flood'
+  | 'paper' | 'tear' | 'lens' | 'rewind' | 'static' | 'swap';
 export type MoveName = 'push' | 'pull' | 'left' | 'right' | 'rise' | 'still';
 export type Scene = {
   start: number; end: number; set?: SetName; shot?: ShotName; zoom?: number;
@@ -25,9 +30,12 @@ export type Scene = {
   dutch?: number;                                 // a held camera roll, degrees   // recenter: 0..1, how far the shot follows a real face back to centre           // the camera's move through the scene (default: alternating push + drift)
   depth?: 'mix' | 'orbs' | 'shards' | 'embers' | 'none';   // drifting depth elements, far and near
   dir?: 1 | -1;                                   // the direction this scene drifts and hands its motion to the next
+  place?: 'bottom' | 'left' | 'right';            // where the person sits (the split look: bottom, the visual above)
 };
 export type Motion = 'refined' | 'punchy';
-export type Props = { track: Track; scenes: Scene[]; effects: FxSpec[]; audio?: string | null; motion?: Motion; room?: string | null };
+/** The look: the film's finish (grade, overlays, texture) and its default sets. Effects and cuts from any look can be used. */
+export type Look = 'gloss' | 'newsroom' | 'glass' | 'vhs' | 'split';
+export type Props = { track: Track; scenes: Scene[]; effects: FxSpec[]; audio?: string | null; motion?: Motion; room?: string | null; look?: Look; hud?: Record<string, string> };
 export type Face = { x: number; y: number; w: number; top: number };
 
 export const clamp = (x: number, a = 0, b = 1) => Math.max(a, Math.min(b, x));
@@ -85,6 +93,8 @@ const SHOT_ZOOM = (tr: Track): Record<ShotName, number> => tr.placeholder
 // Real footage is framed like a camera operator would: by the face's size and height, averaged over the scene (so the
 // framing holds still while the person moves), following the face back toward the centre line as they drift.
 const TARGET: Record<Exclude<ShotName, 'none'>, [number, number]> = { wide: [0.14, 0.5], mid: [0.2, 0.44], close: [0.3, 0.45] };
+// placed shots (the split look): the person small, low and to one side, the top of the frame left for the visual
+const PLACE: Record<NonNullable<Scene['place']>, [number, number, number]> = { bottom: [0.13, 0.66, 0], left: [0.12, 0.66, -0.2], right: [0.12, 0.66, 0.2] };
 const avgCache = new Map<string, Face>();
 function sceneFace(tr: Track, sc: Scene): Face {
   const key = `${sc.start}:${sc.end}`;
@@ -101,18 +111,19 @@ export function shotAt(tr: Track, sc: Scene, frame: number, W: number, H: number
   const face = faceAt(tr, frame);
   if (!tr.placeholder && tr.face.length) {
     const avg = sceneFace(tr, sc), t = frame / tr.fps;
-    const [tw, tyF] = TARGET[(sc.shot ?? 'mid') === 'none' ? 'mid' : (sc.shot as Exclude<ShotName, 'none'>) ?? 'mid'];
+    const [tw, tyF, ox] = sc.place ? PLACE[sc.place] : [...TARGET[(sc.shot ?? 'mid') === 'none' ? 'mid' : (sc.shot as Exclude<ShotName, 'none'>) ?? 'mid'], 0];
     const k = clamp((t - sc.start) / Math.max(0.1, sc.end - sc.start));
     const s = (sc.zoom ?? (tw * W) / avg.w) * (1 + (sc.push ?? 0) * k);
     let ty = tyF * H - avg.y * s, lift = 0;
     if (ty + H * s < H) { lift = Math.min(H * 0.12, H - (ty + H * s)); ty = H - H * s - lift; }   // lift at most 12 %, faded
-    const tx = W / 2 - avg.x * s - (face.x - avg.x) * s * (sc.recenter ?? 0.75);
+    const tx = W / 2 + ox * W - avg.x * s - (face.x - avg.x) * s * (sc.recenter ?? 0.75);
     return { s, tx, ty, lift };
   }
   const t = frame / tr.fps;
   const k = clamp((t - sc.start) / Math.max(0.1, sc.end - sc.start));
   const s = (sc.zoom ?? SHOT_ZOOM(tr)[sc.shot ?? 'mid']) * (1 + (sc.push ?? 0.035) * k);   // the slow push is the living thing
   // keep the face's x on the frame's centre line (gently), the bottom edge at or below the frame's bottom
+  if (sc.place) { const [, , ox] = PLACE[sc.place], sp = 0.62 * (1 + (sc.push ?? 0.035) * k); return { s: sp, tx: W / 2 + ox * W - (W / 2) * sp, ty: H - H * sp, lift: 0 }; }
   let tx = W / 2 - (W / 2) * s, ty = H - H * s;         // zoomed out: centred, bottom-anchored
   // reframing: a real clip's face drifts; the shot leans most of the way back toward the centre line, like an operator
   if (!tr.placeholder) tx += (W / 2 - face.x) * s * (sc.recenter ?? 0.75);
@@ -137,6 +148,7 @@ export type FxDef = {
   personScale?: (c: FxCtx) => number;   // a punch on the person (around the face)
   sticker?: (c: FxCtx) => number;       // white outline width around the person
   blur?: number;                        // motion-blur samples for its layers
+  step?: number;                        // animate on N frames per second (newsroom graphics run on 12: the stepped, hand-made feel)
 };
 
 export const opt = (c: FxCtx, k: string, d: number) => { const v = c.o[k]; return v === undefined || v === '' ? d : Number(v); };
@@ -163,6 +175,9 @@ CustomEase.create('leave', '0.55,0,0.85,0.35');   // exits: accelerate away, no 
 // The motion mode is set once per frame by the Stage (each render tab has its own module state, so this stays pure).
 export const MOTION: { mode: Motion; tempo: number } = { mode: 'refined', tempo: 1.8 };
 export const setMotion = (mode: Motion = 'refined') => { MOTION.mode = mode; MOTION.tempo = mode === 'refined' ? 1.8 : 1; };
+/** The film's look and its HUD text (camcorder date, labels), set once per frame by the Stage like MOTION. */
+export const LOOK: { name: Look; hud: Record<string, string> } = { name: 'gloss', hud: {} };
+export const setLook = (name: Look = 'gloss', hud: Record<string, string> = {}) => { LOOK.name = name; LOOK.hud = hud; };
 // Sharp curves the punchy library was written with, mapped to their refined counterparts (overshoots become settles).
 const REFINED: Record<string, string> = {
   'expo.out': 'premium', 'power3.out': 'silk', 'power2.out': 'silk', 'power4.out': 'premium', 'back.out(1.6)': 'silk',

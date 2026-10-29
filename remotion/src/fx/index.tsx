@@ -6,6 +6,7 @@ import { PAPER_FX } from './paper';
 import { PAPER3D_FX } from './paper3d';
 import { RIBBON_FX } from './ribbon';
 import { TYPE_FX } from './type';
+import { LOOK_FX } from '../looks';
 
 // The effect library, in the order `emx.py list` prints it. Each entry is an FxDef (see lib/core.ts).
 export const EFFECTS: Record<string, FxDef> = {
@@ -16,6 +17,7 @@ export const EFFECTS: Record<string, FxDef> = {
   ...PAPER3D_FX,
   ...EXTRA_FX,
   ...GLASS_FX,
+  ...LOOK_FX,
   sticker: {
     desc: 'A white sticker outline around the person (pair it with the halftone set and a mega-word)',
     options: 'width (px at 1080)',

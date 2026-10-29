@@ -1,6 +1,6 @@
 """Resolve a plan's speech anchors into clip seconds.
 
-Any `start`, `end`, `press` or `times` entry may be a number or an anchor on the voice:
+Any `start`, `end`, `press`, `times` or `...At` (markAt, revealAt, focusAt) entry may be a number or an anchor on the voice:
   "w:hoki"        the start of the word "hoki" (first time it is said)      "we:hoki"   its end
   "w:kami@2"      the second "kami"                                          "w:hoki+0.2" / "w:hoki-0.1"  shifted
   "l:3" / "le:3"  the start / end of spoken line 3 (lines.json, 0-based)
@@ -54,6 +54,8 @@ def resolve(plan_path, job):
         if 'start' in e: e['start'] = A.at(e['start'], lead=True)
         if 'end' in e: e['end'] = A.at(e['end'])
         if 'press' in e: e['press'] = A.at(e['press'])          # a CTA pill's press lands on its word, exactly
+        for k in [k for k in e if k.endswith('At') and isinstance(e[k], str)]:
+            e[k] = A.at(e[k], lead=True)                        # markAt / revealAt / focusAt: an accent inside an effect
         if isinstance(e.get('times'), str) and e['times']:
             e['times'] = '|'.join(str(A.at(x.strip(), lead=True)) for x in e['times'].split('|'))
     return plan

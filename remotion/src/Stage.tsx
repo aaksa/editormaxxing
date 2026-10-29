@@ -2,7 +2,10 @@ import React, { useMemo } from 'react';
 import { AbsoluteFill, Html5Audio, OffthreadVideo, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
 import { CameraMotionBlur } from '@remotion/motion-blur';
 import { Cam, camAt, camStyle, DEPTH, faceIn } from './lib/camera';
-import { applyShot, clamp, CutName, ease, faceAt, FxCtx, FxDef, FxSpec, lerp, MOTION, poseAt, Props, reactAt, Scene, setMotion, Shot, shotAt } from './lib/core';
+import { applyShot, clamp, CutName, ease, faceAt, FxCtx, FxDef, FxSpec, hash, lerp, LOOK, MOTION, poseAt, Props, reactAt, Scene, setLook, setMotion, Shot, shotAt } from './lib/core';
+import { Grade, LOOK_SET, vhsWrap } from './looks';
+import { stepFrame } from './looks/common';
+import { LF } from './looks/fonts';
 import { EFFECTS } from './fx';
 import { Placeholder } from './Placeholder';
 import { defaultDepth, DepthField } from './sets/Depth';
@@ -22,8 +25,10 @@ const WINDOW: Record<CutName, [number, number]> = {
   glide: [0.24, 0.62], depth: [0.26, 0.56], curtain: [0.42, 0.46], bloom: [0.3, 0.62], iris: [0, 1.0],
   whip: [0.13, 0.21], zoom: [0.17, 0.25], cut: [0, 0],
   flare: [0.36, 0.56], spin: [0.3, 0.42], slats: [0, 0.62], push: [0.22, 0.4], flood: [0.3, 0.56],
+  paper: [0, 0.72], tear: [0.16, 0.4], lens: [0.3, 0.46], rewind: [0.42, 0.22], static: [0.09, 0.13], swap: [0.24, 0.42],
 };
-const OVERLAP: CutName[] = ['glide', 'depth', 'curtain', 'bloom', 'flare', 'spin', 'slats', 'push', 'flood'];
+const OVERLAP: CutName[] = ['glide', 'depth', 'curtain', 'bloom', 'flare', 'spin', 'slats', 'push', 'flood', 'paper', 'tear', 'lens', 'rewind', 'static', 'swap'];
+const CARRY: CutName[] = ['glide', 'depth', 'swap'];      // cuts through which the person stays one continuous figure
 
 type View = { sc: Scene; idx: number; style: React.CSSProperties; filter?: string; hidePerson?: boolean };
 
@@ -77,12 +82,13 @@ const SceneView: React.FC<{ p: Props; v: View; frame: number; react: number; own
     sticker = Math.max(sticker, a.def.sticker?.(ctx(a.o, 1, cam0)) ?? 0);
   }
   const cam = camAt(sc, idx, t, W, H, react, punch);
-  const set = sc.set ?? 'studio';
-  const depth = sc.depth ?? defaultDepth(set);
+  const set = sc.set ?? LOOK_SET[LOOK.name];
+  const depth = sc.depth ?? (LOOK.name === 'gloss' ? defaultDepth(set) : 'none');
   const layer = (a: Active, slot: Slot) => {
     const d = SLOT_DEPTH[slot];
     const Comp = a.def[slot]!;
-    const Inner: React.FC = () => <Comp c={ctx(a.o, d, cam, useCurrentFrame())} />;
+    // graphics that animate on N frames a second (the newsroom's 12) read a stepped clock; the camera stays smooth
+    const Inner: React.FC = () => { const f = useCurrentFrame(); return <Comp c={ctx(a.o, d, cam, a.def.step ? stepFrame(f, fps, a.def.step) : f)} />; };
     return (
       <AbsoluteFill key={`${slot}${a.i}`} style={camStyle(cam, d, W, H)}>
         {a.def.blur ? <CameraMotionBlur samples={a.def.blur} shutterAngle={180}><Inner /></CameraMotionBlur> : <Inner />}
@@ -114,6 +120,7 @@ const sm = (a: number, b: number, x: number) => { const k = clamp((x - a) / (b -
 
 export const Stage: React.FC<Props> = (p) => {
   setMotion(p.motion ?? 'refined');
+  setLook(p.look ?? 'gloss', p.hud ?? {});
   const frame = useCurrentFrame();
   const { fps, width: W, height: H } = useVideoConfig();
   const t = frame / fps;
@@ -209,6 +216,64 @@ export const Stage: React.FC<Props> = (p) => {
         <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 40%, rgba(242,15,20,${alpha}) 0%, rgba(150,0,8,${alpha}) 100%)`,
           WebkitMaskImage: drain, maskImage: drain }} />
       );
+    } else if (kind === 'paper') {
+      // the spinning newspaper: the new scene arrives as a page from far away, turning fast and slowing as it fills the frame
+      const g = ease('premium')(q), s = lerp(0.06, 1, g), rot = (1 - g) * 600 * dir;
+      views.push({ sc: a, idx: nb - 1, style: {}, filter: `brightness(${1 - 0.35 * sm(0, 0.6, q)}) blur(${(4 * sm(0, 0.6, q)).toFixed(1)}px)` });
+      views.push({ sc: b, idx: nb, style: { transform: `rotate(${rot}deg) scale(${s})`, boxShadow: q < 0.97 ? `0 30px 80px rgba(0,0,0,0.6), 0 0 0 ${(14 * (1 - g)).toFixed(1)}px #F3EBD8` : undefined } });
+    } else if (kind === 'tear') {
+      // the old page is torn away: a ragged edge crosses the frame, a white paper rim riding it, the old half lifting off
+      const g = ease('glide')(q), edgeX = lerp(-0.25, 1.25, g) * W, N = 24;
+      let pts = `M -10 -10 L ${edgeX + (hash(1) - 0.5) * W * 0.06} -10 `;
+      const rim: string[] = [];
+      for (let i = 0; i <= N; i++) { const yy = (i / N) * H, xx = edgeX - (yy / H) * W * 0.18 + (hash(i * 3.3 + 7) - 0.5) * W * 0.05; pts += `L ${xx} ${yy} `; rim.push(`${xx},${yy}`); }
+      pts += `L -10 ${H + 10} Z`;
+      views.push({ sc: a, idx: nb - 1, style: {} });
+      views.push({ sc: b, idx: nb, style: { clipPath: `path('${pts}')`, transform: `scale(${1.03 - 0.03 * g})` } });
+      overlay = (
+        <svg width={W} height={H} style={{ position: 'absolute', inset: 0 }}>
+          <polyline points={rim.join(' ')} fill="none" stroke="#F4EEDF" strokeWidth={W * 0.022} strokeLinejoin="round" style={{ filter: 'drop-shadow(-6px 0 8px rgba(0,0,0,0.35))' }} />
+        </svg>
+      );
+    } else if (kind === 'lens') {
+      // a bar of glass sweeps across; through it the frame bends and blurs, and behind it the world has changed
+      const g = ease('glide')(q), bx = lerp(-0.35, 1.05, g) * W, bw = W * 0.34;
+      views.push({ sc: a, idx: nb - 1, style: {} });
+      views.push({ sc: b, idx: nb, style: { clipPath: `inset(0 ${Math.max(0, W - bx - bw / 2)}px 0 0)` } });
+      overlay = (
+        <div style={{ position: 'absolute', left: bx - bw / 2, top: -H * 0.05, width: bw, height: H * 1.1, borderRadius: bw * 0.5, transform: 'rotate(8deg)',
+          backdropFilter: 'blur(22px) saturate(1.8) brightness(1.12)', background: 'rgba(255,255,255,0.08)',
+          boxShadow: 'inset 2px 0 0 rgba(255,255,255,0.7), inset -2px 0 0 rgba(255,255,255,0.35), 0 0 60px rgba(255,255,255,0.2)' }} />
+      );
+    } else if (kind === 'rewind') {
+      // the tape rewinds: the picture rolls and tears sideways under a REW display, then the next scene catches the tracking
+      const u = clamp(q / qc), v = clamp((q - qc) / (1 - qc));
+      const roll = q < qc ? (u * u * H * 0.6) % H : 0, jit = (hash(frame * 1.7) - 0.5) * W * 0.05 * (q < qc ? u : 1 - v);
+      views.push(q < qc ? { sc: a, idx: nb - 1, style: { transform: `translate(${jit}px, ${-roll}px) scaleY(${1 + 0.1 * u})` }, filter: `contrast(${1 + 0.4 * u}) saturate(${1 - 0.5 * u})` }
+        : { sc: b, idx: nb, style: { transform: `translateX(${jit}px)` }, filter: `contrast(${1 + 0.3 * (1 - v)})` });
+      const fs = W * 0.09, k = q < qc ? 1 : 1 - v;
+      overlay = (
+        <AbsoluteFill>
+          {Array.from({ length: 6 }, (_, i) => <div key={i} style={{ position: 'absolute', left: 0, width: W, top: hash(i + frame * 0.37) * H, height: 4 + 26 * hash(i * 9 + frame),
+            background: 'rgba(255,255,255,0.35)', opacity: k, mixBlendMode: 'screen', filter: 'blur(2px)' }} />)}
+          {q < qc ? <div style={{ position: 'absolute', left: W * 0.6, top: H * 0.2, fontFamily: LF.osd, fontSize: fs, color: '#f4f4f4', textShadow: `${fs * 0.06}px ${fs * 0.06}px 0 #000` }}>◀◀ REW</div> : null}
+        </AbsoluteFill>
+      );
+    } else if (kind === 'static') {
+      // a burst of snow over the cut
+      views.push(q < qc ? { sc: a, idx: nb - 1, style: {} } : { sc: b, idx: nb, style: {} });
+      const k = 1 - Math.abs(q - qc) / Math.max(qc, 1 - qc);
+      overlay = (
+        <svg width={W} height={H} style={{ position: 'absolute', inset: 0, opacity: clamp(k * 1.4) }}>
+          <filter id="cutsnow"><feTurbulence type="fractalNoise" baseFrequency="0.8 0.3" numOctaves="1" seed={frame % 89} /><feColorMatrix values="0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 0 1" /></filter>
+          <rect width={W} height={H} filter="url(#cutsnow)" />
+        </svg>
+      );
+    } else if (kind === 'swap') {
+      // the world slides sideways like a carousel while the person stays put (the split look's cut)
+      const g = ease('glide')(q);
+      views.push({ sc: a, idx: nb - 1, style: { transform: `translateX(${-dir * W * g}px)` } });
+      views.push({ sc: b, idx: nb, style: { transform: `translateX(${dir * W * (1 - g)}px)` } });
     } else {   // bloom: a soft light swells over the cut
       views.push(q < qc ? { sc: a, idx: nb - 1, style: {} } : { sc: b, idx: nb, style: {} });
       white = q < qc ? ease('silk')(q / qc) : 1 - ease('silk')((q - qc) / (1 - qc));
@@ -229,7 +294,7 @@ export const Stage: React.FC<Props> = (p) => {
   // continuity: through a glide or a depth cut the person stays one continuous figure, reframing from shot to shot,
   // while the world changes around them
   let carried: React.ReactNode = null;
-  if (nb > 0 && (cutKind(nb) === 'glide' || cutKind(nb) === 'depth') && scenes[nb - 1].shot !== 'none' && scenes[nb].shot !== 'none') {
+  if (nb > 0 && CARRY.includes(cutKind(nb)) && scenes[nb - 1].shot !== 'none' && scenes[nb].shot !== 'none') {
     const [pre, post] = WINDOW[cutKind(nb)], q = clamp((t - (scenes[nb].start - pre)) / (pre + post)), k = ease('glide')(q);
     const A = shotAt(p.track, scenes[nb - 1], frame, W, H), B = shotAt(p.track, scenes[nb], frame, W, H);
     const ca = camAt(scenes[nb - 1], nb - 1, t, W, H, react), cb = camAt(scenes[nb], nb, t, W, H, react);
@@ -251,19 +316,24 @@ export const Stage: React.FC<Props> = (p) => {
     );
   }
   const audio = p.audio ?? (p.track.audio ? (p.track.placeholder ? 'voice.wav' : 'source.mp4') : null);
+  const vhs = LOOK.name === 'vhs' ? vhsWrap(frame, W) : null;
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
       {audio ? <Html5Audio src={staticFile(audio)} /> : null}
       <svg width="0" height="0" style={{ position: 'absolute' }}>
         {pushBlur > 0.3 ? <filter id="emx-push" x="0" y="0" width="100%" height="100%"><feGaussianBlur stdDeviation={`${pushBlur.toFixed(1)} 0`} edgeMode="duplicate" /></filter> : null}
+        {vhs?.defs}
       </svg>
-      {views.map((v) => <SceneView key={`${v.idx}`} p={p} v={v} frame={frame} react={react} owner={owner} />)}
-      {carried}
-      {curtain}
-      {overlay}
-      {white > 0.01 ? (
-        <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 45%, rgba(255,255,255,${clamp(white * 1.1)}) 0%, rgba(255,250,245,${white * 0.9}) 70%)` }} />
-      ) : null}
+      <AbsoluteFill style={vhs?.style}>
+        {views.map((v) => <SceneView key={`${v.idx}`} p={p} v={v} frame={frame} react={react} owner={owner} />)}
+        {carried}
+        {curtain}
+        {overlay}
+        {white > 0.01 ? (
+          <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 45%, rgba(255,255,255,${clamp(white * 1.1)}) 0%, rgba(255,250,245,${white * 0.9}) 70%)` }} />
+        ) : null}
+      </AbsoluteFill>
+      <Grade look={LOOK.name} W={W} H={H} frame={frame} fps={fps} />
     </AbsoluteFill>
   );
 };

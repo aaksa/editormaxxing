@@ -1,0 +1,20 @@
+{
+  "look": "vhs",
+  "hud": {"mode": "rec", "date": "OCT.29 2026", "time": "PM 4:20"},
+  "scenes": [
+    {"start": 0,             "end": "l:1-0.08",    "set": "footage",    "shot": "mid",   "in": "cut"},
+    {"start": "l:1-0.08",    "end": "w:big-0.08",  "set": "footage",    "shot": "close", "in": "static"},
+    {"start": "w:big-0.08",  "end": "l:2-0.08",    "set": "bluescreen", "shot": "mid",   "in": "static"},
+    {"start": "l:2-0.08",    "end": "w:can't-0.08","set": "footage",    "shot": "wide",  "in": "rewind"},
+    {"start": "w:can't-0.08","end": 10,            "set": "footage",    "shot": "mid",   "in": "static"}
+  ],
+  "effects": [
+    {"fx": "tape",        "start": 0.1, "end": "l:1-0.1", "title": "SESSION ’26", "sub": "T-120 · SP · TAPE 03", "y": 0.27},
+    {"fx": "cc-caption",  "start": "w:welcome", "end": "l:1-0.1", "text": "WELCOME BACK TO|OUR SESSION TODAY", "y": 0.66, "speed": 0.7},
+    {"fx": "cc-caption",  "start": "l:1", "end": "w:big-0.1", "text": "I'M REALLY EXCITED", "y": 0.66, "speed": 0.6},
+    {"fx": "glitch-word", "start": "w:big", "end": "l:2-0.1", "text": "BIG NEWS", "y": 0.21, "size": 230},
+    {"fx": "menu",        "start": "l:2", "end": "w:can't-0.1", "title": "— PROJECT —", "items": "WORKING ON IT|FOR MONTHS|ALMOST READY", "times": "w:working|w:months|w:months+0.3", "y": 0.2},
+    {"fx": "ff",          "start": "w:can't", "end": "w:all"},
+    {"fx": "osd",         "start": "w:all", "end": 10, "text": "SEE IT|SOON ▶", "y": 0.2, "size": 150, "align": "center"}
+  ]
+}

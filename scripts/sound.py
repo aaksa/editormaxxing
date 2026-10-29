@@ -22,16 +22,36 @@ SOUNDS = {
     'air':     ("anoisesrc=color=pink:seed=5:d=0.95,highpass=f=180,lowpass=f=1600,volume='pow(sin(PI*t/0.95),2)*2.4':eval=frame", 0.95),
     'soft_pop': ("aevalsrc='0.7*sin(2*PI*t*(420+900*exp(-20*t)))*exp(-13*t)':d=0.3", 0.3),
     'chime':   ("aevalsrc='0.32*(sin(2*PI*880*t)+0.55*sin(2*PI*1320*t)+0.25*sin(2*PI*1760*t))*exp(-3.6*t)*(1-exp(-90*t))':d=1.3", 1.3),
+    'typing':  ("aevalsrc='0.55*sin(2*PI*1900*t)*exp(-140*t)*(lt(mod(t,0.075),0.012))+0.3*sin(2*PI*(380)*t)*exp(-60*mod(t,0.075))*lt(mod(t,0.075),0.02)':d=0.6", 0.6),
+    'stamp':   ("aevalsrc='0.95*sin(2*PI*t*(70+140*exp(-30*t)))*exp(-11*t)+0.3*sin(2*PI*t*(900+400*exp(-50*t)))*exp(-40*t)':d=0.45", 0.45),
+    'static':  ("anoisesrc=color=white:seed=41:d=0.3,highpass=f=900,volume='0.9*(1-t/0.3)':eval=frame", 0.3),
+    'beep':    ("aevalsrc='0.35*sin(2*PI*1500*t)*(1-exp(-200*t))*exp(-9*t)':d=0.25", 0.25),
+    'glass':   ("aevalsrc='0.3*(sin(2*PI*2093*t)+0.6*sin(2*PI*3136*t)+0.35*sin(2*PI*5274*t))*exp(-6*t)*(1-exp(-300*t))':d=0.8", 0.8),
+    'rewind':  ("anoisesrc=color=pink:seed=19:d=0.6,bandpass=f=1800:width_type=o:w=1.2,tremolo=f=34:d=0.9,volume='1.8*sin(PI*t/0.6)':eval=frame", 0.6),
     'flutter': ("anoisesrc=color=white:seed=33:d=0.9,bandpass=f=2600:width_type=o:w=1.8,tremolo=f=9:d=0.7,volume='pow(sin(PI*t/0.9),2)*1.2':eval=frame", 0.9),
 }
 
 # what each cut and each effect sounds like, and when (seconds after its start; lists give several hits)
 CUT = {'whip': ('whoosh', -0.18), 'zoom': ('whoosh', -0.2), 'bloom': ('swell', -0.42), 'iris': ('whoosh_lo', -0.1), 'cut': None,
        'glide': ('air', -0.32), 'depth': ('air', -0.36), 'curtain': ('whoosh', -0.4),
-       'flare': ('swell', -0.42), 'spin': ('whoosh', -0.28), 'slats': ('air', -0.05), 'push': ('impact', -0.05), 'flood': ('whoosh_lo', -0.3)}
+       'flare': ('swell', -0.42), 'spin': ('whoosh', -0.28), 'slats': ('air', -0.05), 'push': ('impact', -0.05), 'flood': ('whoosh_lo', -0.3),
+       'paper': ('flutter', -0.05), 'tear': ('paper', -0.12), 'lens': ('glass', -0.1), 'rewind': ('rewind', -0.42), 'static': ('static', -0.09),
+       'swap': ('air', -0.24)}
 # the refined mode swaps the punchy hits for their softer cousins
 SOFTER = {'pop': 'soft_pop', 'paper': 'flutter', 'whoosh': 'air'}
 FX = {
+    # newsroom
+    'newspaper': [('paper', 0.0), ('tick', 0.5)], 'clipping': [('paper', 0.0)], 'photo': [('paper', 0.0)], 'map': [('paper', 0.0), ('pop', 0.4)],
+    'redact': [('typing', 0.1)], 'stamp': [('stamp', 0.12)], 'typewriter': [('typing', 0.1)],
+    # glass
+    'glass-title': [('air', 0.0)], 'glass-card': [('glass', 0.15)], 'glass-notify': [('glass', 0.1)], 'glass-number': [('swell', 0.0), ('glass', 0.5)],
+    'glass-list': [('soft_pop', 0.3)], 'light-sweep': [('shimmer', 0.0)], 'glass-orbs': [('air', 0.0)],
+    # vhs
+    'osd': [('beep', 0.0)], 'glitch-word': [('static', 0.0), ('impact', 0.02)], 'menu': [('beep', 0.0)], 'cc-caption': [], 'tape': [('whoosh_lo', 0.0)],
+    'ff': [('rewind', 0.0)],
+    # split
+    'panel': [('air', 0.0)], 'chart': [('tick', 0.2)], 'steps': [('tick', 0.1)], 'compare': [('soft_pop', 0.2)], 'arrow-note': [('paper', 0.0)],
+    'lower-third': [('air', 0.0)],
     'mega-word': [('impact', 0.22)], 'gloss-word': [('pop', 0.08)], 'ribbon': [('whoosh', 0.0)], 'icon-3d': [('pop', 0.06)],
     'paper-card': [('paper', 0.0)], 'headline': [('tick', 0.05)], 'arc-text': [('pop', 0.1)], 'name-title': [('whoosh', 0.0)],
     'title-card': [('shimmer', 0.05)], 'punch': [('impact', 0.0)], 'magnifier': [('whoosh_lo', 0.0)], 'torn-note': [('paper', 0.0)],
@@ -111,4 +131,12 @@ def mix(job, plan, duration, voice, music=None, sfx_db=-14.0, music_db=-22.0):
     graph.append(f'{bus}amix=inputs={n}:normalize=0:duration=first,atrim=0:{duration},loudnorm=I=-14:TP=-1.5:LRA=11[out]')
     out = os.path.join(job, 'mix.wav')
     run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', ';'.join(graph), '-map', '[out]', '-ar', str(SR), out])
+    # one-pass loudnorm undershoots on short films (it adapts as it goes); measure, apply the exact gain, limit the peaks
+    m = subprocess.run(['ffmpeg', '-hide_banner', '-nostats', '-i', out, '-af', 'ebur128', '-f', 'null', '-'], capture_output=True, text=True).stderr
+    hits = [float(x) for x in __import__('re').findall(r'I:\s+(-?[\d.]+) LUFS', m)]
+    if hits and abs(-14.0 - hits[-1]) > 0.3:
+        tmp = out[:-4] + '.pre.wav'; os.replace(out, tmp)
+        run(['ffmpeg', '-v', 'error', '-y', '-i', tmp, '-af', f'volume={-14.0 - hits[-1]:.2f}dB,alimiter=limit=0.87:level=false:attack=2:release=60',
+             '-ar', str(SR), out])
+        os.remove(tmp)
     return cl

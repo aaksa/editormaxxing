@@ -1,5 +1,5 @@
 import type React from 'react';
-import { clamp, ease, Face, MOTION, Scene } from './core';
+import { clamp, ease, Face, LOOK, MOTION, Scene } from './core';
 
 // The camera rig: one virtual camera per scene, applied to every layer scaled by that layer's depth. A layer at depth d
 // moves d times as far and zooms d times as much as the person (depth 1), so the room drifts slowly behind them, the words
@@ -35,7 +35,8 @@ export function camAt(sc: Scene, idx: number, t: number, W: number, H: number, r
   }
   // the viewport's arrival (the reference opens most scenes this way): a pull-back from ~1.55x with a roll that
   // settles and a blur that clears, or a drop from above; then the held Dutch angle
-  const enter = sc.enter ?? (idx === 0 ? 'none' : 'pullback');
+  // the split look keeps the person still through its cuts (only the visual changes)
+  const enter = sc.enter ?? (idx === 0 || LOOK.name === 'split' ? 'none' : 'pullback');
   const te = t - sc.start, ke = ease(refined ? 'premium' : 'expo.out')(clamp(te / (refined ? 0.7 : 0.4)));
   let b = 0;
   if (enter === 'pullback') { z *= 1 + 0.55 * (1 - ke); r += -dir * 9 * (1 - ke); b = 16 * (1 - ke) * (1 - ke); }

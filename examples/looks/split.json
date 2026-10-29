@@ -1,0 +1,19 @@
+{
+  "look": "split",
+  "scenes": [
+    {"start": 0,             "end": "l:1-0.08",    "set": "board", "place": "bottom", "in": "cut", "move": "still"},
+    {"start": "l:1-0.08",    "end": "w:big-0.08",  "set": "board", "place": "bottom", "in": "swap", "move": "still"},
+    {"start": "w:big-0.08",  "end": "l:2-0.08",    "set": "slate", "place": "bottom", "in": "swap", "move": "still"},
+    {"start": "l:2-0.08",    "end": "w:can't-0.08","set": "board", "place": "bottom", "in": "swap", "move": "still"},
+    {"start": "w:can't-0.08","end": 10,            "set": "board", "place": "bottom", "in": "swap", "move": "still"}
+  ],
+  "effects": [
+    {"fx": "panel",       "start": 0.05, "end": "l:1-0.1", "tag": "SESSION", "title": "Welcome back", "url": "session.today", "metric": "LIVE"},
+    {"fx": "lower-third", "start": "w:session", "end": "l:1-0.1", "text": "Today’s session", "sub": "29 Oct 2026", "y": 0.6},
+    {"fx": "chart",       "start": "l:1", "end": "w:big-0.1", "title": "How excited we are", "values": "20|35|60|98", "labels": "Jul|Aug|Sep|Oct", "unit": "%"},
+    {"fx": "panel",       "start": "w:big", "end": "l:2-0.1", "tag": "NEW", "title": "Big news", "url": "app.session.today", "metric": "NEW", "focus": "0.3,0.1,0.35,0.3", "focusAt": "w:news"},
+    {"fx": "arrow-note",  "start": "w:with", "end": "l:2-0.1", "text": "for you!", "from": "0.72,0.62", "to": "0.62,0.42", "size": 80},
+    {"fx": "steps",       "start": "l:2", "end": "w:can't-0.1", "title": "This project", "items": "Plan|Build for months|Test|Show you", "times": "w:we've|w:working|w:project|w:months"},
+    {"fx": "compare",     "start": "w:can't", "end": 10, "left": "Now", "right": "Soon", "rows": "Waiting::Seeing it|Hints::The full thing", "times": "w:wait|w:see"}
+  ]
+}

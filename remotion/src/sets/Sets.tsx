@@ -3,6 +3,7 @@ import { AbsoluteFill, OffthreadVideo, staticFile } from 'remotion';
 import { hash, SetName } from '../lib/core';
 import { ShaderSet } from './Shader';
 import { C } from '../lib/fonts';
+import { lookSet } from '../looks';
 
 // The sets the person is cut out onto. Each one keeps a slow living thing (a drift, a turning light) so a held shot
 // never freezes. All are drawn, so they work the same on the placeholder and on real footage.
@@ -102,6 +103,8 @@ const Blue: React.FC<{ W: number; H: number; t: number }> = ({ W, H, t }) => (
 );
 
 export const SetView: React.FC<{ set: SetName; W: number; H: number; t: number; frame: number; room?: string | null }> = ({ set, W, H, t, frame, room }) => {
+  const own = lookSet(set, W, H, t, frame);
+  if (own) return <>{own}</>;
   switch (set) {
     case 'halftone': return <Studio W={W} H={H} t={t} dots />;
     case 'blush': return <Blush W={W} H={H} t={t} />;
