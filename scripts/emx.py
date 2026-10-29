@@ -222,7 +222,7 @@ def check(args):
     for b in range(blanks): pad.append(f'color=c=black:s=270x480[b{b}]')
     labels = ''.join(f'[v{i}]' for i in range(len(pngs))) + ''.join(f'[b{b}]' for b in range(blanks))
     layout = '|'.join(f'{c * 270}_{r * 480}' for r in range(rows) for c in range(cols))
-    graph = ';'.join(pad) + (f';{labels}xstack=inputs={cols * rows}:layout={layout}' if cols * rows > 1 else '')   # xstack needs 2+ inputs
+    graph = ';'.join(pad) + f';{labels}xstack=inputs={cols * rows}:layout={layout}' if cols * rows > 1 else '[0:v]scale=270:-1'   # xstack needs 2+
     run(['ffmpeg', '-v', 'error', '-y', *inputs, '-filter_complex', graph, '-frames:v', '1', sheet])
     print('sheet:', sheet)
 

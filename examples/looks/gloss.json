@@ -1,0 +1,114 @@
+{
+ "look": "gloss",
+ "scenes": [
+  {
+   "start": 0,
+   "end": "l:1-0.08",
+   "set": "studio",
+   "shot": "wide",
+   "in": "cut",
+   "move": "push"
+  },
+  {
+   "start": "l:1-0.08",
+   "end": "w:big-0.08",
+   "set": "halftone",
+   "shot": "mid",
+   "in": "push",
+   "sticker": 9
+  },
+  {
+   "start": "w:big-0.08",
+   "end": "l:2-0.08",
+   "set": "dark",
+   "shot": "mid",
+   "in": "flare"
+  },
+  {
+   "start": "l:2-0.08",
+   "end": "w:can't-0.08",
+   "set": "stripes",
+   "shot": "wide",
+   "in": "slats"
+  },
+  {
+   "start": "w:can't-0.08",
+   "end": 10,
+   "set": "blush",
+   "shot": "mid",
+   "in": "bloom"
+  }
+ ],
+ "effects": [
+  {
+   "fx": "mega-word",
+   "start": 0.05,
+   "end": "l:1-0.1",
+   "text": "WELCOME",
+   "script": "back",
+   "exit": "cut",
+   "buys": "a warm, big welcome: the session is an event"
+  },
+  {
+   "fx": "gloss-word",
+   "start": "w:session",
+   "end": "l:1-0.1",
+   "text": "SESSION",
+   "sub": "today",
+   "side": "center",
+   "y": 0.74
+  },
+  {
+   "fx": "ribbon",
+   "start": "w:really",
+   "end": "w:big-0.1",
+   "text": "REALLY EXCITED",
+   "sep": " \u2022 "
+  },
+  {
+   "fx": "icon-3d",
+   "start": "w:big",
+   "end": "l:2-0.1",
+   "icon": "gift",
+   "y": 0.23,
+   "size": 330,
+   "glow": 0.9
+  },
+  {
+   "fx": "gloss-word",
+   "start": "w:big",
+   "end": "l:2-0.1",
+   "text": "BIG NEWS",
+   "sub": "to share with you",
+   "side": "center",
+   "y": 0.74
+  },
+  {
+   "fx": "punch",
+   "start": "w:news",
+   "end": "w:with",
+   "zoom": 1.14
+  },
+  {
+   "fx": "stack-lines",
+   "start": "l:2",
+   "end": "w:can't-0.1",
+   "lines": "we've been working|on this project|for MONTHS",
+   "times": "w:we've|w:on|w:for"
+  },
+  {
+   "fx": "headline",
+   "start": "w:can't",
+   "end": 10,
+   "script": "can't wait",
+   "text": "SEE IT",
+   "sub": "for you all",
+   "y": 0.2
+  },
+  {
+   "fx": "chevrons",
+   "start": "w:see",
+   "end": 10
+  }
+ ]
+}
