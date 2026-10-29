@@ -1,0 +1,5 @@
+node_modules/
+.venv/
+jobs/
+*.mp4
+!demo/*.mp4

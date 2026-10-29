@@ -1,0 +1,113 @@
+{
+ "motion": "refined",
+ "scenes": [
+  {
+   "start": 0,
+   "end": "w:i'm-0.15",
+   "set": "silk",
+   "shot": "wide",
+   "move": "push",
+   "moveAmount": 0.16,
+   "enter": "none",
+   "in": "cut"
+  },
+  {
+   "start": "w:i'm-0.15",
+   "end": "w:we've-0.2",
+   "set": "studio",
+   "shot": "mid",
+   "move": "push",
+   "moveAmount": 0.14,
+   "dutch": -3,
+   "in": "push"
+  },
+  {
+   "start": "w:we've-0.2",
+   "end": "w:and+0.25",
+   "set": "ember",
+   "shot": "wide",
+   "move": "push",
+   "moveAmount": 0.12,
+   "dir": -1,
+   "in": "flare"
+  },
+  {
+   "start": "w:and+0.25",
+   "end": 10.0,
+   "set": "silk",
+   "shot": "close",
+   "move": "pull",
+   "moveAmount": 0.1,
+   "in": "spin"
+  }
+ ],
+ "effects": [
+  {
+   "fx": "headline",
+   "start": "w:welcome",
+   "end": "w:i'm-0.15",
+   "script": "hello &",
+   "text": "Welcome back",
+   "sub": "to our session today",
+   "y": 0.1,
+   "buys": "a warm open, built letter by letter in the order the eye reads"
+  },
+  {
+   "fx": "glass-word",
+   "start": "w:big",
+   "end": "w:we've-0.2",
+   "text": "BIG NEWS",
+   "y": 0.19,
+   "size": 170,
+   "buys": "the news as an object made of glass, catching the light"
+  },
+  {
+   "fx": "punch",
+   "start": "w:big",
+   "end": "we:you",
+   "zoom": 1.08
+  },
+  {
+   "fx": "headline",
+   "start": "w:working",
+   "end": "w:and+0.25",
+   "script": "working on it",
+   "text": "for months",
+   "sub": "",
+   "y": 0.1
+  },
+  {
+   "fx": "paper-3d",
+   "start": "w:project",
+   "end": "w:and+0.25",
+   "kind": "brief",
+   "title": "The Project",
+   "sub": "In the works",
+   "items": "Jan|Feb|Mar|Apr|May|Jun",
+   "done": 5,
+   "x": 0.73,
+   "y": 0.68,
+   "width": 480,
+   "from": "right",
+   "buys": "months of work, made into an object you could hold"
+  },
+  {
+   "fx": "glass-word",
+   "start": "w:can't",
+   "end": 10.0,
+   "text": "Coming soon",
+   "tint": "red",
+   "y": 0.15,
+   "size": 130
+  },
+  {
+   "fx": "cta-pill",
+   "start": "w:wait",
+   "end": 10.0,
+   "text": "Follow along",
+   "press": "w:see",
+   "y": 0.78,
+   "buys": "the ask, last, as a button that answers"
+  }
+ ]
+}

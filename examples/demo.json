@@ -1,0 +1,66 @@
+{
+  "scenes": [
+    {"start": 0,            "end": "l:1-0.12",  "set": "studio",   "shot": "wide",  "in": "cut"},
+    {"start": "l:1-0.12",   "end": "l:2-0.12",  "set": "studio",   "shot": "wide"},
+    {"start": "l:2-0.12",   "end": "l:3-0.12",  "set": "studio",   "shot": "wide"},
+    {"start": "l:3-0.12",   "end": "l:4-0.12",  "set": "halftone", "shot": "wide",  "sticker": 10},
+    {"start": "l:4-0.12",   "end": "l:5-0.12",  "set": "blush",    "shot": "none",  "in": "bloom"},
+    {"start": "l:5-0.12",   "end": "l:6-0.12",  "set": "stripes",  "shot": "wide"},
+    {"start": "l:6-0.12",   "end": "l:7-0.12",  "set": "dark",     "shot": "none"},
+    {"start": "l:7-0.12",   "end": "l:8-0.12",  "set": "stripes",  "shot": "mid",   "in": "zoom"},
+    {"start": "l:8-0.12",   "end": "l:9-0.12",  "set": "blue",     "shot": "mid",   "in": "bloom"},
+    {"start": "l:9-0.12",   "end": "l:10-0.12", "set": "studio",   "shot": "close", "in": "zoom"},
+    {"start": "l:10-0.12",  "end": "w:susun-0.3","set": "dark",    "shot": "none"},
+    {"start": "w:susun-0.3","end": "l:11-0.12", "set": "dark",     "shot": "none",  "in": "iris"},
+    {"start": "l:11-0.12",  "end": 46.9,        "set": "studio",   "shot": "close", "in": "bloom"}
+  ],
+  "effects": [
+    {"fx": "mega-word",  "start": 0.15,        "end": "l:1-0.12", "text": "GIMANA", "script": "caranya", "exit": "cut",
+     "buys": "the hook is a question big enough to sit behind the speaker"},
+    {"fx": "paper-card", "start": "w:satu@1",  "end": "le:0",     "title": "1 MINGGU", "checks": 7, "buys": "one week, made literal"},
+
+    {"fx": "mega-word",  "start": "l:1-0.12",  "end": "l:2-0.12", "text": "GIMANA", "script": "caranya", "enter": "hold", "exit": "drop"},
+    {"fx": "gloss-word", "start": "w:budget@1","end": "l:2-0.12", "text": "budget", "sub": "tanpa buang waktu", "side": "left", "y": 0.72,
+     "buys": "the constraint lands on its word"},
+
+    {"fx": "ribbon",     "start": "w:dua@1",   "end": "l:3-0.12", "text": "2 HARI", "below": 2.0, "buys": "two days wraps around the speaker"},
+    {"fx": "icon-3d",    "start": "w:kualitas","end": "l:3-0.12", "icon": "people", "size": 300, "title": "Leads", "script": "kualitas",
+     "sub": "ketahuan dalam 2 hari", "titleY": 0.13},
+
+    {"fx": "mega-word",  "start": "w:bukan",   "end": "l:4-0.12", "text": "HOKI", "script": "Bukan!", "tilt": -9, "scriptX": 0.05, "scriptSize": 170,
+     "buys": "the denial is louder than the word it denies"},
+
+    {"fx": "headline",   "start": "w:audit",   "end": "l:5-0.12", "script": "audit", "text": "Proyekmu", "sub": "dari awal sampai akhir", "y": 0.13},
+    {"fx": "magnifier",  "start": "w:proyekmu","end": "l:5-0.12", "title": "Audit bisnis", "rows": "Iklan|Leads|Follow-up|Closing",
+     "marks": "ok|bad|bad|ok", "y": 0.55, "buys": "an audit means finding the leaks, row by row"},
+
+    {"fx": "stack-lines","start": "w:ngobrol", "end": "l:6-0.12", "lines": "ngobrol langsung|dengan pelanggan|tanya kenapa mereka beli|lalu kami pelajari|POLANYA",
+     "times": "w:ngobrol|w:dengan|w:tanya|w:lalu|w:polanya", "buys": "the method builds as it is said"},
+
+    {"fx": "title-card", "start": "l:6",       "end": "l:7-0.12", "top": "dari situ", "title": "Penawaran", "bottom": "yang pas",
+     "caption": "kami bikin penawaran|yang pas untuk mereka", "captionY": 0.74},
+    {"fx": "icon-3d",    "start": "w:penawaran","end": "l:7-0.12","icon": "gift", "size": 440, "y": 0.5, "layer": "screen"},
+
+    {"fx": "name-title", "start": "w:saya@1",  "end": "l:8-0.12", "pre": "Halo, saya", "name": "Nama|Kamu", "y": 0.66},
+
+    {"fx": "torn-note",  "start": "w:empat",   "end": "l:9-0.12", "text": "4 tahun", "sub": "di dunia marketing", "chips": "Iklan|Analitik|Konten",
+     "y": 0.2, "buys": "experience pinned up like a fact"},
+
+    {"fx": "arc-text",   "start": "w:selama",  "end": "w:budget@2-0.1", "top": "selama", "text": "waktu itu", "radius": 1.0},
+    {"fx": "big-number", "start": "w:budget@2","end": "l:10-0.12","prefix": "Rp", "to": 15000000000, "sub": "budget iklan|sudah saya kelola", "y": 0.62,
+     "note": "angka contoh", "buys": "the scale of the experience, as one number"},
+    {"fx": "punch",      "start": "w:15",      "end": "we:miliar", "zoom": 1.1},
+
+    {"fx": "broll",      "start": "l:10-0.12", "end": "w:susun-0.3", "label": "ruang kerja"},
+    {"fx": "title-card", "start": "w:pengalaman","end": "w:susun-0.3", "top": "dari", "title": "Pengalaman", "bottom": "itu", "y": 0.3},
+
+    {"fx": "icon-3d",    "start": "w:susun",   "end": "l:11-0.12", "icon": "target", "size": 420, "y": 0.47, "layer": "screen"},
+    {"fx": "title-card", "start": "w:susun",   "end": "l:11-0.12", "top": "saya susun", "title": "Sistem Kerja", "y": 0.16, "caption": "satu sistem|yang bisa diulang", "captionY": 0.72},
+
+    {"fx": "headline",   "start": "w:kalau",   "end": 46.9, "script": "kalau|mau", "text": "bisnismu|penjualan", "sub": "sudah jalan|naik 2x - 3x",
+     "times": "w:penjualan", "y": 0.12},
+    {"fx": "chevrons",   "start": "w:naik",    "end": "w:komen-0.1", "below": 2.4},
+    {"fx": "gloss-word", "start": "w:komen",   "end": 46.9, "text": "komen CEK", "side": "center", "y": 0.74, "width": 620,
+     "buys": "the call to action as an object, not a subtitle"}
+  ]
+}

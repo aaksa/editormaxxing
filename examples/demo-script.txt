@@ -1,0 +1,14 @@
+# One spoken line per line. The placeholder voice reads them in order; lines.json gets every line's start and end,
+# words.json (emx.py words) every word's, so the plan can anchor beats to "w:word" or "l:N".
+Gimana caranya ngetes ide bisnis dalam satu minggu?
+Tanpa buang budget dan waktu.
+Dalam dua hari, kamu sudah tahu kualitas leads kamu.
+Ini bukan soal hoki.
+Kami audit proyekmu dari awal sampai akhir.
+Kami ngobrol langsung dengan pelanggan, tanya kenapa mereka beli, lalu kami pelajari polanya.
+Dari situ, kami bikin penawaran yang pas.
+Halo, saya Nama Kamu.
+Saya sudah empat tahun di dunia marketing.
+Selama waktu itu, saya sudah kelola budget iklan lima belas miliar.
+Dari pengalaman itu, saya susun satu sistem kerja.
+Kalau bisnismu sudah jalan, dan kamu mau penjualan naik dua sampai tiga kali lipat, komen CEK.

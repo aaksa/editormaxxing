@@ -1,0 +1,62 @@
+{
+  "motion": "punchy",
+  "scenes": [
+    {"start": 0,             "end": "l:2-0.12",   "set": "studio",   "shot": "wide",  "enter": "pullback", "move": "push", "moveAmount": 0.2, "depth": "none", "in": "cut"},
+    {"start": "l:2-0.12",    "end": "l:3-0.12",   "set": "studio",   "shot": "wide",  "move": "push", "moveAmount": 0.1, "depth": "none", "in": "push"},
+    {"start": "l:3-0.12",    "end": "l:4-0.12",   "set": "halftone", "shot": "wide",  "sticker": 10, "dutch": 4, "move": "push", "moveAmount": 0.08, "depth": "none", "in": "flare"},
+    {"start": "l:4-0.12",    "end": "w:proyekmu-0.1", "set": "blush", "shot": "none", "enter": "none", "move": "still", "depth": "none", "in": "flare"},
+    {"start": "w:proyekmu-0.1", "end": "l:5-0.12", "set": "blush",   "shot": "none",  "enter": "none", "move": "push", "moveAmount": 0.05, "depth": "none", "in": "slats"},
+    {"start": "l:5-0.12",    "end": "l:6-0.12",   "set": "stripes",  "shot": "wide",  "enter": "none", "move": "push", "moveAmount": 0.06, "depth": "none", "in": "cut"},
+    {"start": "l:6-0.12",    "end": "l:7-0.12",   "set": "dark",     "shot": "none",  "enter": "none", "move": "push", "moveAmount": 0.05, "depth": "none", "in": "cut"},
+    {"start": "l:7-0.12",    "end": "l:8-0.12",   "set": "stripes",  "shot": "mid",   "enter": "none", "move": "push", "moveAmount": 0.05, "depth": "none", "in": "flood"},
+    {"start": "l:8-0.12",    "end": "l:9-0.12",   "set": "blue",     "shot": "mid",   "move": "push", "moveAmount": 0.08, "depth": "none", "in": "bloom"},
+    {"start": "l:9-0.12",    "end": "l:10-0.12",  "set": "studio",   "shot": "close", "move": "push", "moveAmount": 0.06, "depth": "none", "in": "spin"},
+    {"start": "l:10-0.12",   "end": "w:susun-0.3","set": "dark",     "shot": "wide",  "enter": "none", "move": "push", "moveAmount": 0.08, "depth": "none", "in": "cut"},
+    {"start": "w:susun-0.3", "end": "l:11-0.12",  "set": "dark",     "shot": "none",  "enter": "none", "move": "push", "moveAmount": 0.05, "depth": "none", "in": "iris"},
+    {"start": "l:11-0.12",   "end": 46.9,         "set": "studio",   "shot": "close", "enter": "none", "move": "push", "moveAmount": 0.05, "depth": "none", "in": "cut"}
+  ],
+  "effects": [
+    {"fx": "mega-word",  "start": 0.25,         "end": "l:2-0.12", "text": "GIMANA", "script": "caranya", "exit": "cut",
+     "buys": "shot 01: the giant word builds letter by letter behind the head"},
+    {"fx": "paper-card", "start": "w:satu@1",   "end": "le:0", "title": "1 MINGGU", "checks": 7, "y": 0.62},
+    {"fx": "gloss-word", "start": "w:ngetes",   "end": "w:budget@1-0.15", "text": "tes", "side": "left", "x": 0.27, "y": 0.68, "width": 290, "exit": "slide"},
+    {"fx": "gloss-word", "start": "w:budget@1", "end": "l:2-0.12", "text": "budget", "sub": "tanpa buang waktu", "side": "right", "x": 0.58, "y": 0.72, "width": 470},
+
+    {"fx": "ribbon",     "start": "w:dua@1",    "end": "l:3-0.12", "text": "2 HARI", "below": 2.0},
+    {"fx": "icon-3d",    "start": "w:kualitas", "end": "l:3-0.12", "icon": "people", "size": 300, "title": "Leads", "script": "kualitas",
+     "sub": "ketahuan dalam 2 hari", "titleY": 0.13},
+
+    {"fx": "mega-word",  "start": "w:bukan",    "end": "l:4-0.12", "text": "HOKI", "script": "Bukan!", "tilt": -9, "scriptX": 0.05, "scriptSize": 170, "exit": "cut"},
+
+    {"fx": "glass-word", "start": "l:4-0.12",   "end": "w:proyekmu-0.1", "text": "AUDIT", "pill": 1, "y": 0.42, "size": 150},
+
+    {"fx": "headline",   "start": "w:proyekmu-0.1", "end": "l:5-0.12", "script": "audit", "text": "Proyekmu", "sub": "dari awal sampai akhir", "y": 0.12},
+    {"fx": "magnifier",  "start": "w:proyekmu", "end": "l:5-0.12", "title": "Audit bisnis", "rows": "Iklan|Leads|Follow-up|Closing", "marks": "ok|bad|bad|ok", "y": 0.55},
+
+    {"fx": "stack-lines","start": "w:ngobrol",  "end": "l:6-0.12", "lines": "ngobrol langsung|dengan pelanggan|tanya kenapa mereka beli|lalu kami pelajari|POLANYA",
+     "times": "w:ngobrol|w:dengan|w:tanya|w:lalu|w:polanya"},
+
+    {"fx": "title-card", "start": "l:6",        "end": "l:7-0.12", "top": "dari situ", "title": "Penawaran", "bottom": "yang pas",
+     "caption": "kami bikin penawaran|yang pas untuk mereka", "captionY": 0.74},
+    {"fx": "icon-3d",    "start": "l:6",        "end": "w:penawaran-0.1", "icon": "clipboard", "size": 420, "y": 0.5, "layer": "screen"},
+    {"fx": "icon-3d",    "start": "w:penawaran","end": "l:7-0.12", "icon": "gift", "size": 440, "y": 0.5, "layer": "screen"},
+
+    {"fx": "name-title", "start": "w:saya@1",   "end": "l:8-0.12", "pre": "Halo, saya", "name": "Nama|Kamu", "y": 0.62},
+
+    {"fx": "torn-note",  "start": "w:empat",    "end": "l:9-0.12", "text": "4 tahun", "sub": "di dunia marketing", "chips": "Iklan|Analitik|Konten", "y": 0.2},
+
+    {"fx": "arc-text",   "start": "w:selama",   "end": "l:10-0.12", "top": "selama", "text": "waktu itu", "radius": 1.0},
+    {"fx": "big-number", "start": "w:budget@2", "end": "l:10-0.12", "prefix": "Rp", "to": 15000000000, "sub": "budget iklan|sudah saya kelola", "y": 0.62, "note": "angka contoh"},
+    {"fx": "icon-3d",    "start": "w:15",       "end": "l:10-0.12", "icon": "target", "size": 170, "x": 0.5, "y": 0.6, "layer": "front", "glow": 0.3},
+    {"fx": "punch",      "start": "w:15",       "end": "we:miliar", "zoom": 1.1},
+
+    {"fx": "title-card", "start": "w:pengalaman","end": "w:susun-0.3", "top": "dari", "title": "Pengalaman", "bottom": "itu", "y": 0.12},
+
+    {"fx": "icon-3d",    "start": "w:susun",    "end": "l:11-0.12", "icon": "target", "size": 420, "y": 0.45, "layer": "screen"},
+    {"fx": "title-card", "start": "w:susun",    "end": "l:11-0.12", "top": "saya susun", "title": "Sistem Kerja", "y": 0.66, "width": 560},
+
+    {"fx": "headline",   "start": "w:kalau",    "end": 46.9, "script": "kalau|mau", "text": "bisnismu|penjualan", "sub": "sudah jalan|naik 2x - 3x",
+     "times": "w:penjualan", "y": 0.12},
+    {"fx": "chevrons",   "start": "w:naik",     "end": 46.9, "below": 2.4}
+  ]
+}

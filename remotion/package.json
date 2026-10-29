@@ -1,0 +1,29 @@
+{
+  "name": "editormaxxing-remotion",
+  "private": true,
+  "description": "Render lane of editormaxxing: a cut-out person (or the placeholder character) on red-gloss sets, with giant glossy words, 3D icons, text ribbons and whip cuts.",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.6",
+    "@react-three/fiber": "9.3.0",
+    "@remotion/bundler": "4.0.534",
+    "@remotion/cli": "4.0.534",
+    "@remotion/google-fonts": "4.0.534",
+    "@remotion/motion-blur": "4.0.534",
+    "@remotion/renderer": "4.0.534",
+    "@remotion/three": "4.0.534",
+    "gsap": "3.15.0",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "remotion": "4.0.534",
+    "three": "0.179.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.12",
+    "@types/three": "0.179.0",
+    "typescript": "5.9.2"
+  }
+}
